@@ -1,0 +1,2 @@
+# lustre.conf: Managed by Puppet
+options lnet networks="<%= $profile_lustre_client::module::network_identifier %>(<%= $profile_lustre_client::module::interface_name %>)"

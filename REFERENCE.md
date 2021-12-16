@@ -7,6 +7,15 @@
 ### Classes
 
 * [`profile_lustre_client`](#profile_lustre_client): Install and configure Lustre client
+* [`profile_lustre_client::firewall`](#profile_lustre_clientfirewall): A short summary of the purpose of this class
+* [`profile_lustre_client::install`](#profile_lustre_clientinstall): Install Lustre client
+* [`profile_lustre_client::module`](#profile_lustre_clientmodule): Configure and build lnet & lustre kernel modules
+* [`profile_lustre_client::mounts`](#profile_lustre_clientmounts): Mount Lustre filesystems on the client
+* [`profile_lustre_client::service`](#profile_lustre_clientservice): Configure the lnet service
+
+### Defined types
+
+* [`profile_lustre_client::mount_resource`](#profile_lustre_clientmount_resource): Mount Lustre filesystem on a directory
 
 ## Classes
 
@@ -21,4 +30,235 @@ Install and configure Lustre client
 ```puppet
 include profile_lustre_client
 ```
+
+#### Parameters
+
+The following parameters are available in the `profile_lustre_client` class:
+
+* [`interface_name`](#interface_name)
+* [`network_identifier`](#network_identifier)
+
+##### <a name="interface_name"></a>`interface_name`
+
+Data type: `String`
+
+Name of network interface that lustre should use
+
+##### <a name="network_identifier"></a>`network_identifier`
+
+Data type: `String`
+
+LNet Network Identifier (NID) - includes Lustre Network Driver (LND) and LND network number
+e.g. IB fabrics are generally "o2ib0" while Ethernet are "tcp0"
+
+### <a name="profile_lustre_clientfirewall"></a>`profile_lustre_client::firewall`
+
+A short summary of the purpose of this class
+
+#### Examples
+
+##### 
+
+```puppet
+include profile_lustre_client::firewall
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_lustre_client::firewall` class:
+
+* [`dports`](#dports)
+* [`proto`](#proto)
+* [`sources`](#sources)
+
+##### <a name="dports"></a>`dports`
+
+Data type: `Array[Integer]`
+
+Destination ports that need to be open for the lustre service
+
+##### <a name="proto"></a>`proto`
+
+Data type: `String`
+
+Protocol that needs to be open for the lustre service
+
+##### <a name="sources"></a>`sources`
+
+Data type: `Array[String]`
+
+CIDR sources that need to be open for the lustre service.
+This should include all of the Lustre servers and any LNET routers.
+It may also need to other lustre client peers (need confirmation about this).
+
+### <a name="profile_lustre_clientinstall"></a>`profile_lustre_client::install`
+
+Install Lustre client
+
+#### Examples
+
+##### 
+
+```puppet
+include profile_lustre_client::install
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_lustre_client::install` class:
+
+* [`required_pkgs`](#required_pkgs)
+* [`yumrepo`](#yumrepo)
+
+##### <a name="required_pkgs"></a>`required_pkgs`
+
+Data type: `Array[ String ]`
+
+Packages that need to be installed for Lustre mounts to work.
+
+##### <a name="yumrepo"></a>`yumrepo`
+
+Data type: `Hash`
+
+Hash of yumrepo resource for lustre yum repository
+
+### <a name="profile_lustre_clientmodule"></a>`profile_lustre_client::module`
+
+Configure and build lnet & lustre kernel modules
+
+#### Examples
+
+##### 
+
+```puppet
+include profile_lustre_client::module
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_lustre_client::module` class:
+
+* [`lnet_conf_file`](#lnet_conf_file)
+* [`modprobe_lustre_conf_file`](#modprobe_lustre_conf_file)
+
+##### <a name="lnet_conf_file"></a>`lnet_conf_file`
+
+Data type: `String`
+
+Full path to lnet.conf file, e.g. "/etc/lnet.conf"
+
+##### <a name="modprobe_lustre_conf_file"></a>`modprobe_lustre_conf_file`
+
+Data type: `String`
+
+Full path to modprobe lustre.conf file, e.g. "/etc/modprobe.d/lustre.conf"
+
+### <a name="profile_lustre_clientmounts"></a>`profile_lustre_client::mounts`
+
+```
+  profile_lustre_client::mounts::map:
+    /mnt/mount:
+      src: "lustre-server1.local@o2ib,lustre-server2.local@o2ib:/filesystem"
+      #opts: "defaults,nosuid,ro"  ## ??
+```
+
+#### Examples
+
+##### 
+
+```puppet
+include profile_lustre_client::mounts
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_lustre_client::mounts` class:
+
+* [`map`](#map)
+
+##### <a name="map"></a>`map`
+
+Data type: `Optional[ Hash ]`
+
+mapping of Lustre filesystems to local mount points
+
+Example hiera parameter:
+
+Default value: ``undef``
+
+### <a name="profile_lustre_clientservice"></a>`profile_lustre_client::service`
+
+Configure the lnet service
+
+#### Examples
+
+##### 
+
+```puppet
+include profile_lustre_client::service
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_lustre_client::service` class:
+
+* [`lnet_service_enabled`](#lnet_service_enabled)
+* [`lnet_service_name`](#lnet_service_name)
+* [`lnet_service_running`](#lnet_service_running)
+
+##### <a name="lnet_service_enabled"></a>`lnet_service_enabled`
+
+Data type: `Boolean`
+
+Boolean to determine if the lnet service is enabled
+
+##### <a name="lnet_service_name"></a>`lnet_service_name`
+
+Data type: `String`
+
+String of the name of the lnet service
+
+##### <a name="lnet_service_running"></a>`lnet_service_running`
+
+Data type: `Boolean`
+
+Boolean to determine if the lnet service is ensured running
+
+## Defined types
+
+### <a name="profile_lustre_clientmount_resource"></a>`profile_lustre_client::mount_resource`
+
+Mount Lustre filesystem on a directory
+
+#### Examples
+
+##### 
+
+```puppet
+profile_lustre_client::mount_resource { '/mnt/mount':
+  src => 'lustre-server1.local@o2ib,lustre-server2.local@o2ib:/filesystem',
+  #opts => 'defaults,nosuid,ro'  ## ??
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_lustre_client::mount_resource` defined type:
+
+* [`src`](#src)
+* [`opts`](#opts)
+
+##### <a name="src"></a>`src`
+
+Data type: `String`
+
+
+
+##### <a name="opts"></a>`opts`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `'defaults,nodev,nosuid'`
 

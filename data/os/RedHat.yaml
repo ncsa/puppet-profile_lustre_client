@@ -1,0 +1,11 @@
+---
+profile_lustre_client::install::required_pkgs:
+  - "kmod-lustre-client"
+  - "lustre-client"
+profile_lustre_client::install::yumrepo:
+  lustre:
+    baseurl: "https://downloads.whamcloud.com/public/lustre/latest-release/el$releasever/client"
+    descr: "lustre-client Repository el $releasever - Whamcloud"
+    enabled: 1
+    #gpgcheck: 1
+    #gpgkey: "https://..."
