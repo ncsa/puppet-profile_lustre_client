@@ -1,1 +1,22 @@
---- {}
+---
+profile_lustre_client::interface_name: "ib1"
+profile_lustre_client::network_identifier: "o2ib0"
+
+profile_lustre_client::firewall::dports:
+  - 988
+profile_lustre_client::firewall::proto: "tcp"
+profile_lustre_client::firewall::sources:
+  - "127.0.0.1/32"
+
+profile_lustre_client::module::lnet_conf_file: "/etc/lnet.conf"
+profile_lustre_client::module::modprobe_lustre_conf_file: "/etc/modprobe.d/lustre.conf"
+
+## EXAMPLE LUSTRE MOUNTS MAP
+#profile_lustre_client::mounts::map:
+#  /mnt/mount:
+#    src: "lustre-server1.local@o2ib,lustre-server2.local@o2ib:/filesystem"
+#    opts: "defaults,nodev,nosuid"
+
+profile_lustre_client::service::lnet_service_enabled: false
+profile_lustre_client::service::lnet_service_name: "lnet"
+profile_lustre_client::service::lnet_service_running: false

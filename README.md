@@ -6,9 +6,6 @@
 NCSA Common Puppet Profiles - install and configure Lustre client
 
 
-> **This module is currently under development and not ready for use.**
-
-
 ## Table of Contents
 
 1. [Description](#description)
@@ -33,18 +30,36 @@ include ::profile_lustre_client
 
 ## Usage
 
-The following parameters are required to be set:
+The following parameters likely need to be set for any deployment:
 
-- tbd
+```yaml
+profile_lustre_client::interface_name: "ib1"
+profile_lustre_client::network_identifier: "o2ib0"
+
+profile_lustre_client::firewall::sources:
+  - "lustre-server1.local"
+  - "lustre-server2.local"
+
+profile_lustre_client::install::yumrepo:
+  lustre:
+    baseurl: "https://downloads.whamcloud.com/public/lustre/latest-release/el$releasever/client"
+    descr: "lustre-client Repository el $releasever - Whamcloud"
+    enabled: 1
+    #gpgcheck: 1
+    #gpgkey: "https://..."
+
+profile_lustre_client::mounts::map:
+  /mnt/mount:
+    src: "lustre-server1.local@o2ib,lustre-server2.local@o2ib:/filesystem"
+    opts: "defaults,nodev,nosuid"
+```
 
 
 ## Dependencies
 
-- tbd, likely some yum repo module
+n/a
 
 
 ## Reference
-
-... parameters go here
 
 See: [REFERENCE.md](REFERENCE.md)
