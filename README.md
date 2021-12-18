@@ -48,12 +48,22 @@ profile_lustre_client::install::yumrepo:
     #gpgcheck: 1
     #gpgkey: "https://..."
 
-profile_lustre_client::mounts::map:
+profile_lustre_client::nativemounts::map:
   /mnt/mount:
     src: "lustre-server1.local@o2ib,lustre-server2.local@o2ib:/filesystem"
     opts: "defaults,nodev,nosuid"
 ```
 
+To include bindmounts you would include parameters like this:
+
+```
+profile_lustre_client::bindmounts::map:
+  /scratch:
+    opts: "defaults,nodev,nosuid"
+    src_mountpoint: "/mnt/mount"
+    src_path: "/mnt/mount/scratch"
+...
+```
 
 ## Dependencies
 

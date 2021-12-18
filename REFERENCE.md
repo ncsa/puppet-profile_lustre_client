@@ -7,15 +7,17 @@
 ### Classes
 
 * [`profile_lustre_client`](#profile_lustre_client): Install and configure Lustre client
+* [`profile_lustre_client::bindmounts`](#profile_lustre_clientbindmounts): Create bindmounts (generally of Lustre) on a directory
 * [`profile_lustre_client::firewall`](#profile_lustre_clientfirewall): A short summary of the purpose of this class
 * [`profile_lustre_client::install`](#profile_lustre_clientinstall): Install Lustre client
 * [`profile_lustre_client::module`](#profile_lustre_clientmodule): Configure and build lnet & lustre kernel modules
-* [`profile_lustre_client::mounts`](#profile_lustre_clientmounts): Mount Lustre filesystems on the client
+* [`profile_lustre_client::nativemounts`](#profile_lustre_clientnativemounts): Mount Lustre filesystems on the client
 * [`profile_lustre_client::service`](#profile_lustre_clientservice): Configure the lnet service
 
 ### Defined types
 
-* [`profile_lustre_client::mount_resource`](#profile_lustre_clientmount_resource): Mount Lustre filesystem on a directory
+* [`profile_lustre_client::bindmount_resource`](#profile_lustre_clientbindmount_resource): Create a bindmount (generally of Lustre) on a directory
+* [`profile_lustre_client::nativemount_resource`](#profile_lustre_clientnativemount_resource): Mount Lustre filesystem on a directory
 
 ## Classes
 
@@ -50,6 +52,40 @@ Data type: `String`
 
 LNet Network Identifier (NID) - includes Lustre Network Driver (LND) and LND network number
 e.g. IB fabrics are generally "o2ib0" while Ethernet are "tcp0"
+
+### <a name="profile_lustre_clientbindmounts"></a>`profile_lustre_client::bindmounts`
+
+```
+  profile_lustre_client::bindmounts::map:
+    /scratch:
+      #opts: "defaults,nosuid,nodev,ro"
+      src_mountpoint: "/mnt/mount"
+      src_path: "/mnt/mount/scratch"
+```
+
+#### Examples
+
+##### 
+
+```puppet
+include profile_lustre_client::bindmounts
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_lustre_client::bindmounts` class:
+
+* [`map`](#map)
+
+##### <a name="map"></a>`map`
+
+Data type: `Optional[ Hash ]`
+
+mapping of (Lustre) filesystems to bindmounts
+
+Example hiera parameter:
+
+Default value: ``undef``
 
 ### <a name="profile_lustre_clientfirewall"></a>`profile_lustre_client::firewall`
 
@@ -153,10 +189,10 @@ Data type: `String`
 
 Full path to modprobe lustre.conf file, e.g. "/etc/modprobe.d/lustre.conf"
 
-### <a name="profile_lustre_clientmounts"></a>`profile_lustre_client::mounts`
+### <a name="profile_lustre_clientnativemounts"></a>`profile_lustre_client::nativemounts`
 
 ```
-  profile_lustre_client::mounts::map:
+  profile_lustre_client::nativemounts::map:
     /mnt/mount:
       src: "lustre-server1.local@o2ib,lustre-server2.local@o2ib:/filesystem"
       #opts: "defaults,nosuid,ro"  ## ??
@@ -167,12 +203,12 @@ Full path to modprobe lustre.conf file, e.g. "/etc/modprobe.d/lustre.conf"
 ##### 
 
 ```puppet
-include profile_lustre_client::mounts
+include profile_lustre_client::nativemounts
 ```
 
 #### Parameters
 
-The following parameters are available in the `profile_lustre_client::mounts` class:
+The following parameters are available in the `profile_lustre_client::nativemounts` class:
 
 * [`map`](#map)
 
@@ -226,7 +262,51 @@ Boolean to determine if the lnet service is ensured running
 
 ## Defined types
 
-### <a name="profile_lustre_clientmount_resource"></a>`profile_lustre_client::mount_resource`
+### <a name="profile_lustre_clientbindmount_resource"></a>`profile_lustre_client::bindmount_resource`
+
+Create a bindmount (generally of Lustre) on a directory
+
+#### Examples
+
+##### 
+
+```puppet
+profile_lustre_client::bindmount_resource { '/scratch':
+  #opts           => "defaults,bind,noauto,nosuid,nodev,ro"
+  src_mountpoint => "/mnt/mount",
+  src_path       => "/mnt/mount/scratch",
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_lustre_client::bindmount_resource` defined type:
+
+* [`src_mountpoint`](#src_mountpoint)
+* [`src_path`](#src_path)
+* [`opts`](#opts)
+
+##### <a name="src_mountpoint"></a>`src_mountpoint`
+
+Data type: `String`
+
+
+
+##### <a name="src_path"></a>`src_path`
+
+Data type: `String`
+
+
+
+##### <a name="opts"></a>`opts`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `'defaults,bind,noauto,nodev,nosuid'`
+
+### <a name="profile_lustre_clientnativemount_resource"></a>`profile_lustre_client::nativemount_resource`
 
 Mount Lustre filesystem on a directory
 
@@ -235,7 +315,7 @@ Mount Lustre filesystem on a directory
 ##### 
 
 ```puppet
-profile_lustre_client::mount_resource { '/mnt/mount':
+profile_lustre_client::nativemount_resource { '/mnt/mount':
   src => 'lustre-server1.local@o2ib,lustre-server2.local@o2ib:/filesystem',
   #opts => 'defaults,nosuid,ro'  ## ??
 }
@@ -243,7 +323,7 @@ profile_lustre_client::mount_resource { '/mnt/mount':
 
 #### Parameters
 
-The following parameters are available in the `profile_lustre_client::mount_resource` defined type:
+The following parameters are available in the `profile_lustre_client::nativemount_resource` defined type:
 
 * [`src`](#src)
 * [`opts`](#opts)

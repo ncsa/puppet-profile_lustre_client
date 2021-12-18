@@ -2,6 +2,16 @@
 profile_lustre_client::interface_name: "ib1"
 profile_lustre_client::network_identifier: "o2ib0"
 
+## EXAMPLE BINDMOUNTS MAP
+#profile_lustre_client::bindmounts::map:
+#  /scratch:
+#    src_mountpoint: "/mnt/mount"
+#    src_path: "/mnt/mount/scratch"
+#  /sw:
+#    opts: "defaults,bind,noauto,nodev"
+#    src_mountpoint: "/mnt/mount"
+#    src_path: "/mnt/mount/sw"
+
 profile_lustre_client::firewall::dports:
   - 988
 profile_lustre_client::firewall::proto: "tcp"
@@ -12,7 +22,7 @@ profile_lustre_client::module::lnet_conf_file: "/etc/lnet.conf"
 profile_lustre_client::module::modprobe_lustre_conf_file: "/etc/modprobe.d/lustre.conf"
 
 ## EXAMPLE LUSTRE MOUNTS MAP
-#profile_lustre_client::mounts::map:
+#profile_lustre_client::nativemounts::map:
 #  /mnt/mount:
 #    src: "lustre-server1.local@o2ib,lustre-server2.local@o2ib:/filesystem"
 #    opts: "defaults,nodev,nosuid"

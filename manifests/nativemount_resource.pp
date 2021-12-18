@@ -1,12 +1,12 @@
 # @summary Mount Lustre filesystem on a directory
 #
 # @example
-#   profile_lustre_client::mount_resource { '/mnt/mount':
+#   profile_lustre_client::nativemount_resource { '/mnt/mount':
 #     src => 'lustre-server1.local@o2ib,lustre-server2.local@o2ib:/filesystem',
 #     #opts => 'defaults,nosuid,ro'  ## ??
 #   }
 #
-define profile_lustre_client::mount_resource (
+define profile_lustre_client::nativemount_resource (
   String $src,
   Optional[String] $opts = 'defaults,nodev,nosuid',
 ) {
