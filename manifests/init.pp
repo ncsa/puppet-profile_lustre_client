@@ -14,10 +14,11 @@ class profile_lustre_client (
   String $network_identifier,
 ) {
 
+  include ::profile_lustre_client::bindmounts
   include ::profile_lustre_client::firewall
   include ::profile_lustre_client::install
   include ::profile_lustre_client::module
-  include ::profile_lustre_client::mounts
+  include ::profile_lustre_client::nativemounts
   include ::profile_lustre_client::service
 
 }

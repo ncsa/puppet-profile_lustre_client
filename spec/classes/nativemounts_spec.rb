@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'profile_lustre_client::mounts' do
+describe 'profile_lustre_client::nativemounts' do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }
