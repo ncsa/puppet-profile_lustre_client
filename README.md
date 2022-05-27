@@ -1,3 +1,9 @@
+# DEPRECATED
+
+> :warning: This module has been deprecated in favor of another module.
+> See [puppet-profile_lustre](https://github.com/ncsa/puppet-profile_lustre)
+
+
 # profile_lustre_client
 
 ![pdk-validate](https://github.com/ncsa/puppet-profile_lustre_client/workflows/pdk-validate/badge.svg)
